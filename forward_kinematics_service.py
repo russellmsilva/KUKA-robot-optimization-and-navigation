@@ -9,11 +9,13 @@ from hw2.srv import *
 from geometry_msgs.msg import Twist 
 from geometry_msgs.msg import Point
 
-#The following callback function performs a forward kinematics calculation
-#relating to a jacobian matrix which contains information on the robot arm's joint angles
-#and link lengths. This KUKA robot arm has four links and five joint angles. The grasper
-#of the KUKA robot arm is treated as an end effector which represents the end result
-#of this calculation (an x,y,z coordinate).
+'''
+The following callback function performs a forward kinematics calculation
+relating to a jacobian matrix which contains information on the robot arm's joint angles
+and link lengths. This KUKA robot arm has four links and five joint angles. The grasper
+of the KUKA robot arm is treated as an end effector which represents the end result
+of this calculation (an x,y,z coordinate).
+'''
 def callback(req):
     rospy.loginfo(req)
     
@@ -37,7 +39,7 @@ def callback(req):
     s3 = math.sin(t2)
     s4 = math.sin(t2 + theta3 + theta4)
     
-    #a1 - a4 represent the link lengths
+    #a1-a4 represent the link lengths
     a1 = 0.033
     a2 = 0.155
     a3 = 0.135
