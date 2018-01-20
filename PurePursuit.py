@@ -30,13 +30,6 @@ def waypoint_allocation(data):
     trail = data.path
     final_point = trail[-1]
 
-    #rospy.wait_for_service('/vrep/bucket/pos/get')
-    #bucket = rospy.ServiceProxy('/vrep/bucket/pos/get', GetPosition) 
-
-    #start = rospy.wait_for_message('/vrep/youbot/base/pose', Pose) 
-
-    #cost function
-
     follow = rospy.Publisher('/vrep/youbot/base/cmd_vel', Twist, queue_size = 10)
  
     closest = Point()
