@@ -88,7 +88,6 @@ def waypoint_allocation(data):
 
         #Determines the angular velocity of the robot in order for it to reach the destination in a curved motion
         #which avoids collisions with ungathered blocks while reaching the goal point without too much of an arc.
-        while eliminating cross track error.
         if (((xt * xt) + (yt * yt)) != 0.0):
             heading = (-2.0 * yt) / ((xt * xt) + (yt * yt))
         else:
