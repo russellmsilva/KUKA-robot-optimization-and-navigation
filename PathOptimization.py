@@ -43,7 +43,7 @@ def callback(data):
     for a in range (0, n):
         print(points[a])
 
-    #Constants used a step sizes in the optimization algorithm
+    #Constants used as step sizes in the optimization algorithm
     diff = 0.0001
     gm = 0.01
 
