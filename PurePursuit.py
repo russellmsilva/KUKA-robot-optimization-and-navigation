@@ -17,8 +17,9 @@ trail = []
 robpos = Point(0.0, 0.0, 0.0)
 final_point = Point(0.0, 0.0, 0.0)
 
-#This function called by this service contains the pure pursuit algorithm
-#used in order to move efficiently between way points.
+#This function contains the pure pursuit algorithm, which adjusts the robot's angular
+#velocity determined by a "look-ahead distance" while maintaining a constant linear speed. 
+#This algorithm is used in order to move efficiently between waypoints while avoiding collisions.
 def waypoint_allocation(data):
     
     #The following parameters are determined by PathOptimization.py
@@ -38,10 +39,10 @@ def waypoint_allocation(data):
  
     closest = Point()
     destination = Point()
-
     rospy.wait_for_service('/closest_point_path')
     cp = rospy.ServiceProxy('/closest_point_path', ClosestPointPath)
 
+    #The following look ahead distance was chosen for a small cross track error.
     look_ahead = 0.2 #look ahead distance
 
     rospy.wait_for_service('/interpolate_path')
@@ -58,23 +59,32 @@ def waypoint_allocation(data):
     while final_distance > 0.57 and not rospy.is_shutdown():    
 
         closest = cp(robpos.position,trail)
+        #The destination point changes at a rate determined by the look_ahead distance.
         destination = g(trail,Float32(closest.path_position.data + look_ahead)).point
-
+        
+        #Uses quaternions to interpolate the robot's rotation representation in its current fram
         posQuat = (robpos.orientation.x, robpos.orientation.y, robpos.orientation.z, robpos.orientation.w)
         QuatEuler = euler_from_quaternion(posQuat)
         angle = QuatEuler[2]
         cos = math.cos(angle)
         sin = math.sin(angle)
 
+        #Constantly updates the differences between the destination's coordinates and the robot's coordinates
         deltax = destination.x - robpos.position.x
         deltay = destination.y - robpos.position.y
         deltaz = destination.z
-
+        
+        #This point has coordinates based on the robot's current frame
+        #For example, if the robot is tilted 30 degrees to the left, the destination's x and y
+        #values would change relative to the robot if the robot is treated as the origin (0,0)
         transformed_point = Point(deltax * cos + deltay * sin, deltax * -sin + deltay * cos, deltaz)
 
         xt = transformed_point.x
         yt = transformed_point.y
 
+        #Determines the angular velocity of the robot in order for it to reach the destination in a curved motion
+        #which avoids collisions with ungathered blocks while reaching the goal point without too much of an arc.
+        while eliminating cross track error.
         if (((xt * xt) + (yt * yt)) != 0.0):
             heading = (-2.0 * yt) / ((xt * xt) + (yt * yt))
         else:
@@ -83,6 +93,8 @@ def waypoint_allocation(data):
         diffx = robpos.position.x - final_point.x
         diffy = robpos.position.y - final_point.y
         diffz = robpos.position.z - final_point.z
+        
+        #Computes the euclidean distance. This is used in the while loop condition.
         final_distance = math.sqrt((diffx * diffx) + (diffy * diffy) + (diffz * diffz))
         print final_distance
 
