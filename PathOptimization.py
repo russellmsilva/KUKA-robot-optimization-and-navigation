@@ -12,11 +12,13 @@ from geometry_msgs.m
 sg import Point
 from geometry_msgs.msg import Pose
 
-#The following callback function computes the entirety of the path planning.
-#The callback function takes in the number of blocks, as well as a first and last block
-#as parameters. Because of this, a more efficient path can be planned by computing the
-#minimum distances for each combination of the five blocks. This was not done in order 
-#to conserve computational power.
+'''
+The following callback function computes the entirety of the path planning.
+The callback function takes in the number of blocks, as well as a first and last block
+as parameters. Because of this, a more efficient path can be planned by computing the
+minimum distances for each combination of the five blocks. This was not done in order 
+to conserve computational power.
+'''
 def callback(data):
     #data.num_waypoints represents the number of blocks in the work space
     n = data.num_waypoints
@@ -48,10 +50,12 @@ def callback(data):
     latest_cost = 2.0
     starting_cost = 0.0
     
-    #Optimization algorithm. The operations within this algorithm loop
-    #until a difference between two computed consecutive path costs reaches below 0.1
-    #This represents a "plateau" in the data in which the maximum efficiency
-    #of the path has neared a maximum.
+    '''
+    Optimization algorithm. The operations within this algorithm loop
+    until a difference between two computed consecutive path costs reaches below 0.1
+    This represents a "plateau" in the data in which the maximum efficiency
+    of the path has neared a maximum.
+    '''
     while (abs(latest_cost - starting_cost) > 0.1):
         points_temp_x = points[:]
         points_temp_y = points[:]
