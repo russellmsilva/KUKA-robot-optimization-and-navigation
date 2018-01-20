@@ -17,9 +17,11 @@ trail = []
 robpos = Point(0.0, 0.0, 0.0)
 final_point = Point(0.0, 0.0, 0.0)
 
-#This function contains the pure pursuit algorithm, which adjusts the robot's angular
-#velocity determined by a "look-ahead distance" while maintaining a constant linear speed. 
-#This algorithm is used in order to move efficiently between waypoints while avoiding collisions.
+'''
+This function contains the pure pursuit algorithm, which adjusts the robot's angular
+velocity determined by a "look-ahead distance" while maintaining a constant linear speed. 
+This algorithm is used in order to move efficiently between waypoints while avoiding collisions.
+'''
 def waypoint_allocation(data):
     
     #The following parameters are determined by PathOptimization.py
@@ -53,9 +55,11 @@ def waypoint_allocation(data):
     #Rate at which algorithm loops (10 Hz)
     rate = rospy.Rate(10)
     
-    #Pure Pursuit algorithm runs until a the distance between the goal point and the robot is greater than 0.57.
-    #This is to account for the robot's arm length. The center of the robot must be offset from the block in 
-    #order for the KUKA arm to reach it without a collision.
+    '''
+    Pure Pursuit algorithm runs until a the distance between the goal point and the robot is greater than 0.57.
+    This is to account for the robot's arm length. The center of the robot must be offset from the block in 
+    order for the KUKA arm to reach it without a collision.
+    '''
     while final_distance > 0.57 and not rospy.is_shutdown():    
 
         closest = cp(robpos.position,trail)
