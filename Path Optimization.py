@@ -12,6 +12,7 @@ from geometry_msgs.msg import Point
 from geometry_msgs.msg import Pose
 
 def callback(data):
+    #data.num_waypoints represents the number of blocks in the work space
     n = data.num_waypoints
     start_pos= data.start
     goal_pos = data.goal
